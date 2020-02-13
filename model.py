@@ -1,5 +1,5 @@
 import numpy as np
-# from histogram import kmean
+import pickle as pk
 
 
 def _sigmoid(x):
@@ -7,11 +7,10 @@ def _sigmoid(x):
 
 
 class Feel:
-    def __init__(self, num_param=250, s=25.**2):
+    def __init__(self, num_param=256, s=32.**2):
         self.s = s
-        self.n_param = num_param
-        self.alpha = np.random.normal(loc=0, scale=1 / num_param / s, size=num_param)
-        self.d = np.ones((num_param, 3))
+        self.alpha = np.random.normal(scale=0.1, size=num_param)
+        self.d = np.random.random((num_param, 3)) * 255
         self.b = np.zeros(1, dtype=np.float32)
 
     def __call__(self, x):
@@ -53,14 +52,7 @@ class Feel:
         dalpha *= grad[:, np.newaxis]
         dalpha = np.mean(dalpha, axis=0)
 
-        temp = -(self.d[np.newaxis, np.newaxis, :, :] - x[:, :, np.newaxis, 1:]) / self.s
-        dd = - np.sum(x[:, :, 0:1, np.newaxis] * exp[:, :, :, np.newaxis] * temp, axis=1)
-        dd *= grad[:, np.newaxis, np.newaxis]
-        dd = np.mean(dd, axis=0)
-        dd *= self.alpha[:, np.newaxis]
-
-        db = np.mean(grad)
+        db = np.sum(grad)
 
         self.alpha -= dalpha * lr
-        self.d -= dd * lr
         self.b -= db * lr
