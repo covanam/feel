@@ -15,21 +15,29 @@ class Feel:
     def __call__(self, x):
         pass
 
-    def train(self, data, label, num_iter, lr=1e-3):
+    def train(self, data, label, num_iter, lr=1e-3, val_data=None, val_label=None):
         p = data[:, :, 0:1]
         exp = np.sum((self.d[np.newaxis, np.newaxis, :, :] - data[:, :, np.newaxis, 1:]) ** 2, axis=3)
         exp /= self.s
         exp = np.exp(-0.5 * exp)
+
+        val_exp = np.sum((self.d[np.newaxis, np.newaxis, :, :] - val_data[:, :, np.newaxis, 1:]) ** 2, axis=3)
+        val_exp /= self.s
+        val_exp = np.exp(-0.5 * val_exp)
+        val_p = val_data[:, :, 0:1]
 
         for i in range(num_iter):
             loss, y = self._forward(p, exp, label)
             self._backward((loss, y), label, p, exp, lr=lr)
             # print(loss)
 
-            output = y > 0.5
-            acc = np.sum(output == label) / y.shape[0]
+            # output = y > 0.5
+            # acc = np.sum(output == label) / y.shape[0]
 
-            print(loss, acc)
+            # print('training:', loss, acc)
+            if i % 10 == 0:
+                val_loss = self._forward(val_p, val_exp, val_label)[0]
+                print(loss, val_loss)
 
     def _forward(self, p, exp, label):
         gj = np.sum(self.alpha[np.newaxis, np.newaxis, :] * p * exp, axis=(1, 2))
