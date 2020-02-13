@@ -31,13 +31,16 @@ class Feel:
             self._backward((loss, y), label, p, exp, lr=lr)
             # print(loss)
 
-            # output = y > 0.5
-            # acc = np.sum(output == label) / y.shape[0]
+            output = y > 0.5
+            acc = np.sum(output == label) / y.shape[0]
 
             # print('training:', loss, acc)
-            if i % 10 == 0:
-                val_loss = self._forward(val_p, val_exp, val_label)[0]
-                print(loss, val_loss)
+            if True: #  i % 20 == 0:
+                val_loss, y = self._forward(val_p, val_exp, val_label)
+                output = y > 0.5
+                val_acc = np.sum(output == val_label) / output.shape[0]
+                print('{:.4f}, {:.4f}'.format(loss, val_loss))
+                print('{:.2f}, {:.2f}'.format(acc, val_acc))
 
     def _forward(self, p, exp, label):
         gj = np.sum(self.alpha[np.newaxis, np.newaxis, :] * p * exp, axis=(1, 2))
