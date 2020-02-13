@@ -4,10 +4,11 @@ import numpy as np
 
 model = Feel()
 model.d = pickle.load(open('model/d', 'rb'))
+model = pickle.load(open('model/model', 'rb'))
 with open('data/data.pkl', 'rb') as f:
     data = pickle.load(f).astype(np.float32)
 with open('data/label.pkl', 'rb') as f:
     label = pickle.load(f).astype(np.bool)
 
-model.train(data, label, 100, lr=1e-3)
+model.train(data, label, 5000, lr=1e-3)
 pickle.dump(model, open('model/model', 'wb'))
