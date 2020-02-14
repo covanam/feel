@@ -1,4 +1,8 @@
 import numpy as np
+import histogram
+from histogram import kmean
+import cv2
+import numpy as np
 
 
 def _sigmoid(x):
@@ -13,7 +17,18 @@ class Feel:
         self.b = np.zeros(1, dtype=np.float32)
 
     def __call__(self, x):
-        pass
+        x = cv2.resize(x, (224, 224)).astype(np.float32)
+        x = kmean(x, k=32)
+
+        p = x[:, 0:1]
+        exp = np.sum((self.d[np.newaxis, :, :] - x[:, np.newaxis, 1:]) ** 2, axis=2)
+        exp /= self.s
+        exp = np.exp(-0.5 * exp)
+
+        gj = np.sum(self.alpha[np.newaxis, :] * p * exp)
+        y = _sigmoid(gj + self.b)
+
+        return y
 
     def train(self, data, label, num_iter, lr=1e-3, val_data=None, val_label=None):
         p = data[:, :, 0:1]
