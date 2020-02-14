@@ -6,10 +6,12 @@ import pickle
 import numpy as np
 
 app = Flask(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'upload')
-model = pickle.load(open('model/model', 'rb'))
+RESULT = ''
 FILENAME = ''
-RESULT = 'hi'
+
+model = pickle.load(open('model/model', 'rb'))
 
 
 def process():
@@ -19,7 +21,8 @@ def process():
     cv2.imwrite('static/display.png', x)
     y = model(x.astype(np.float32))
     global RESULT
-    RESULT = 'countryside' if y == 1 else "metropotalian"
+    RESULT = 'countryside' if y > 0.5 else "metropotalian"
+    os.remove(s)
 
 
 @app.route('/upload', methods=["POST"])
@@ -38,7 +41,7 @@ def upload():
 
 @app.route('/')
 def form():
-    return render_template("web.html", outcome=RESULT)
+    return render_template("web.html", outcome=RESULT, filename="static/display.png")
 
 
 if __name__ == '__main__':
