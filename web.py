@@ -21,7 +21,7 @@ def process():
     cv2.imwrite('static/display.png', x)
     y = model(x.astype(np.float32))
     global RESULT
-    RESULT = 'countryside' if y > 0.5 else "metropotalian"
+    RESULT = 'countryside' if y > 0.5 else 'metropotalian'
     os.remove(s)
 
 
@@ -41,7 +41,7 @@ def upload():
 
 @app.route('/')
 def form():
-    return render_template("web.html", outcome=RESULT, filename="static/display.png")
+    return render_template("web.html", outcome=RESULT)
 
 
 if __name__ == '__main__':
