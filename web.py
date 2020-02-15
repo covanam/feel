@@ -4,6 +4,7 @@ from model import Feel
 import cv2
 import pickle
 import numpy as np
+from pathlib import Path
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -56,4 +57,5 @@ def form():
 
 if __name__ == '__main__':
     delete_display_image()
+    Path("upload").mkdir(parents=True, exist_ok=True)
     app.run()
