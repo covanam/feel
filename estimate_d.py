@@ -1,5 +1,4 @@
 import pickle
-import numpy as np
 import cv2
 
 with open('data/sampled.pkl', 'rb') as f:

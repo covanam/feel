@@ -1,8 +1,6 @@
 import numpy as np
-import histogram
 from histogram import kmean
 import cv2
-import numpy as np
 
 
 def _sigmoid(x):
@@ -50,7 +48,7 @@ class Feel:
             acc = np.sum(output == label) / y.shape[0]
 
             # print('training:', loss, acc)
-            if True: #  i % 20 == 0:
+            if i % 20 == 0:
                 val_loss, y = self._forward(val_p, val_exp, val_label)
                 output = y > 0.5
                 val_acc = np.sum(output == val_label) / output.shape[0]
