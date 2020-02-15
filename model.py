@@ -24,9 +24,7 @@ class Feel:
         exp = np.exp(-0.5 * exp)
 
         gj = np.sum(self.alpha[np.newaxis, :] * p * exp)
-        y = _sigmoid(gj + self.b)
-
-        return y
+        return gj + self.b
 
     def train(self, data, label, num_iter, lr=1e-3, val_data=None, val_label=None):
         p = data[:, :, 0:1]
