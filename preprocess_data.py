@@ -3,37 +3,41 @@ import cv2
 from histogram import kmean
 import numpy as np
 import pickle
+import argparse
 
 
-def preprocess_data():
-    data = np.empty((1824, 10, 4), dtype=np.dtype)
-    label = np.empty(1824, dtype=np.int8)
-    label[:891] = 1  # countryside #1
-    label[891:] = 0
-    index = 0
-    for filename in os.listdir('data/countryside'):
-        filename = os.path.join('data/countryside', filename)
-        x = cv2.resize(cv2.imread(filename), dsize=(224, 224)).astype(np.float32)
-        data[index] = kmean(x)
-        print(index)
-        index += 1
+parser = argparse.ArgumentParser()
+parser.add_argument('-s', '--image_size', default='224')
+parser.add_argument('-k', default='10')
+args = parser.parse_args()
 
-    for filename in os.listdir('data/metropolitian'):
-        filename = os.path.join('data/metropolitian', filename)
-        x = cv2.resize(cv2.imread(filename), dsize=(224, 224)).astype(np.float32)
-        data[index] = kmean(x)
-        index += 1
-        print(index)
+im_size = int(args.image_size)
+k = int(args.k)
 
-    if index != 1824:
-        raise RuntimeError('what')
+data = np.empty((1824, k, 4), dtype=np.dtype)
+label = np.empty(1824, dtype=np.int8)
+label[:891] = 1  # countryside #1
+label[891:] = 0
+index = 0
+for filename in os.listdir('data/countryside'):
+    filename = os.path.join('data/countryside', filename)
+    x = cv2.resize(cv2.imread(filename), dsize=(im_size, im_size)).astype(np.float32)
+    data[index] = kmean(x, k=k)
+    print(index)
+    index += 1
 
-    with open('data/data.pkl', 'wb') as f:
-        pickle.dump(data, f)
+for filename in os.listdir('data/metropolitian'):
+    filename = os.path.join('data/metropolitian', filename)
+    x = cv2.resize(cv2.imread(filename), dsize=(im_size, im_size)).astype(np.float32)
+    data[index] = kmean(x, k=k)
+    index += 1
+    print(index)
 
-    with open('data/label.pkl', 'wb') as f:
-        pickle.dump(label, f)
+if index != 1824:
+    raise RuntimeError('what')
 
+with open('data/data{:d}.pk'.format(k), 'wb') as f:
+    pickle.dump(data, f)
 
-if __name__ == '__main__':
-    preprocess_data()
+with open('data/label.pkl', 'wb') as f:
+    pickle.dump(label, f)
