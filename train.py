@@ -32,6 +32,7 @@ else:
 
 model = Feel(num_param, s**2)
 model.d = d
+del d
 # model = pickle.load(open('model/model', 'rb'))
 
 # load data
@@ -50,5 +51,4 @@ del data
 del label
 
 model.train(train_data, train_label, num_epoch, 1e-3, train_d, val_data, val_label)
-filename = 'model/model_h{0:d}_k{1:d}_s{2:.0f}'.format(num_param, k, s)
-pickle.dump(model, open(filename, 'wb'))
+pickle.dump(model, open('model/model', 'wb'))
