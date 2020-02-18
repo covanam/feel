@@ -8,7 +8,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-s', '--image_size', default='224')
-parser.add_argument('-k', default='10')
+parser.add_argument('-k', default='5')
 args = parser.parse_args()
 
 im_size = int(args.image_size)

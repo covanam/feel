@@ -6,9 +6,9 @@ import argparse
 import os
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-n', '--num_param', default='32')
-parser.add_argument('-k', default='4')
-parser.add_argument('-s', default='30')
+parser.add_argument('-n', '--num_param', default='20')
+parser.add_argument('-k', default='5')
+parser.add_argument('-s', default='32')
 parser.add_argument('--num_epoch', default='100')
 parser.add_argument('--train_d', default='false')
 args = parser.parse_args()
