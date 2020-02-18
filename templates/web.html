@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <form action = "http://localhost:5000/upload" method = "POST" enctype = "multipart/form-data">
-            <input type = "file" name = "file" />
-            <input type = "submit"/>
-        </form>
-        <br/>
-        {{outcome}}
-        <br/>
-        <img src="static/display.png" />    
+        <center> 
+            <br/>
+            <h1 style="font-size:40px;">Select a picture:</h1>
+            <form action = "http://localhost:5000/upload" method = "POST" enctype = "multipart/form-data">
+                <input type = "file" name = "file" />
+                <input type = "submit" value = "upload"/>
+            </form>
+            <br/>
+            <br/>
+            <h1 style="font-size:40px;">{{outcome}} </h1>
+            <br/>
+            <img src="static/display.png" />    
+        </center>
     </body>
 </html>

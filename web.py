@@ -24,11 +24,11 @@ def delete_display_image():
 def process():
     s = 'upload/' + FILENAME
     x = cv2.imread(s)
-    x = cv2.resize(x, (224, 224))
+    x = cv2.resize(x, (300, 300))
     cv2.imwrite('static/display.png', x)
     y = model(x.astype(np.float32))
     global RESULT
-    RESULT = 'countryside' if y > 0 else 'metropotalian'
+    RESULT = 'This is countryside picture' if y > 0 else 'This is metropolitian picture'
     os.remove(s)
 
 
@@ -45,7 +45,7 @@ def upload():
     else:
         delete_display_image()
         global RESULT
-        RESULT = "please upload an image"
+        RESULT = "Please select a picture first!"
 
     return redirect('/')
 
